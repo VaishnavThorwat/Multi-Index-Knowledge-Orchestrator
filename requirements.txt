@@ -1,0 +1,17 @@
+# RAG Research Agent — Python Dependencies
+# Install with: pip install -r requirements.txt
+
+# LlamaIndex Core
+llama-index-core>=0.11.0
+
+# LlamaIndex Google GenAI Integrations
+llama-index-embeddings-google-genai>=0.3.0
+llama-index-llms-google-genai>=0.3.0
+
+# LangChain Stack
+langchain>=0.3.0
+langchain-core>=0.3.0
+langchain-google-genai>=2.0.0
+
+# Environment Variable Management
+python-dotenv>=1.0.0
