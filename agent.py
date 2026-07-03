@@ -17,8 +17,7 @@ from langchain_core.tools import Tool
 
 from llama_index.core import VectorStoreIndex, SummaryIndex
 
-from config import agent_llm
-
+from config import llm
 
 # --- System Prompt ---
 SYSTEM_PROMPT = (

@@ -7,11 +7,9 @@ All environment variables and shared constants are defined here.
 
 import os
 from dotenv import load_dotenv
-
 from llama_index.core import Settings
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.llms.google_genai import GoogleGenAI
-from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Load environment variables from .env file
 load_dotenv()
@@ -53,11 +51,6 @@ embed_model = GoogleGenAIEmbedding(
 llm = GoogleGenAI(
     model=LLM_MODEL,
     api_key=API_KEY
-)
-
-agent_llm = ChatGoogleGenerativeAI(
-    model=LLM_MODEL,
-    google_api_key=API_KEY
 )
 
 # --- Apply Global LlamaIndex Settings ---
