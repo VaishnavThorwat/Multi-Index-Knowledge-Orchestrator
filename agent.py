@@ -3,21 +3,20 @@ agent.py
 --------
 Defines the LangChain agent with two RAG-backed tools:
 
-  1. semantic_search_tool  — Vector similarity search for specific facts.
-  2. document_summary_tool — Tree summarization for overviews/themes.
+  1. semantic_search_tool  - Vector similarity search for specific facts.
+  2. document_summary_tool - Tree summarization for overviews/themes.
 
 The agent (powered by Gemini) intelligently decides which tool to use
 based on the nature of the user's query.
 """
 
-from langchain.agents import create_tool_calling_agent
-from langchain.agents.agent import AgentExecutor
-from langchain_core.prompts import ChatPromptTemplate
+from langchain.agents import create_agent
 from langchain_core.tools import Tool
+from langgraph.graph.state import CompiledStateGraph
 
 from llama_index.core import VectorStoreIndex, SummaryIndex
 
-from config import llm
+from config import agent_llm
 
 # --- System Prompt ---
 SYSTEM_PROMPT = (
@@ -51,7 +50,7 @@ def build_agent(
     vector_index: VectorStoreIndex,
     summary_index: SummaryIndex,
     verbose: bool = True,
-) -> AgentExecutor:
+) -> CompiledStateGraph:
     """
     Builds and returns a LangChain AgentExecutor with dual RAG tools.
 
@@ -61,7 +60,7 @@ def build_agent(
         verbose:       Whether to print agent reasoning steps.
 
     Returns:
-        A configured AgentExecutor ready to invoke.
+        A configured LangChain agent graph ready to invoke.
     """
     # Query engines
     vector_engine  = vector_index.as_query_engine(similarity_top_k=3)
@@ -87,15 +86,10 @@ def build_agent(
         ),
     ]
 
-    # Prompt template
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", SYSTEM_PROMPT),
-        ("human", "{input}"),
-        ("placeholder", "{agent_scratchpad}"),
-    ])
-
     # Assemble agent
-    agent = create_tool_calling_agent(agent_llm, tools, prompt)
-    agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=verbose)
-
-    return agent_executor
+    return create_agent(
+        model=agent_llm,
+        tools=tools,
+        system_prompt=SYSTEM_PROMPT,
+        debug=verbose,
+    )

@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from llama_index.core import Settings
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 from llama_index.llms.google_genai import GoogleGenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Load environment variables from .env file
 load_dotenv()
@@ -24,8 +25,8 @@ if not API_KEY:
 
 # --- Model Configuration ---
 # Updated to latest models as of 2026
-EMBEDDING_MODEL = "text-embedding-005"          # Latest stable embedding model
-LLM_MODEL      = "gemini-2.0-flash"             # Latest fast model (replaces 1.5-flash)
+EMBEDDING_MODEL = "gemini-embedding-2"          # Latest stable embedding model
+LLM_MODEL      = "gemini-2.5-flash-lite"             # Latest fast model (replaces 1.5-flash)
 
 # --- Storage & Data Paths ---
 PERSIST_DIR   = "./storage"
@@ -38,7 +39,7 @@ SUMMARY_INDEX_ID = "summary_index_001"
 # --- Ingestion Settings ---
 CHUNK_SIZE    = 512
 CHUNK_OVERLAP = 50
-BATCH_SIZE    = 4    # Documents per batch (tune based on your API quota)
+BATCH_SIZE    = 4    # Nodes per batch (tune based on your API quota)
 BATCH_SLEEP_S = 65   # Seconds to sleep between batches (free-tier safe)
 METADATA_QUESTIONS_PER_NODE = 3
 
@@ -51,6 +52,11 @@ embed_model = GoogleGenAIEmbedding(
 llm = GoogleGenAI(
     model=LLM_MODEL,
     api_key=API_KEY
+)
+
+agent_llm = ChatGoogleGenerativeAI(
+    model=LLM_MODEL,
+    google_api_key=API_KEY
 )
 
 # --- Apply Global LlamaIndex Settings ---

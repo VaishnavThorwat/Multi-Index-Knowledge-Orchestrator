@@ -35,7 +35,7 @@ def build_and_persist_indexes() -> tuple[VectorStoreIndex, SummaryIndex]:
     Returns:
         Tuple of (VectorStoreIndex, SummaryIndex)
     """
-    print("🚀 No existing storage found. Starting fresh ingestion...")
+    print("No existing storage found. Starting fresh ingestion...")
 
     nodes = load_and_ingest_documents()
 
@@ -49,9 +49,9 @@ def build_and_persist_indexes() -> tuple[VectorStoreIndex, SummaryIndex]:
     vector_index.set_index_id(VECTOR_INDEX_ID)
     summary_index.set_index_id(SUMMARY_INDEX_ID)
 
-    # Persist ONCE via the shared context — saves both indexes
+    # Persist ONCE via the shared context - saves both indexes
     storage_context.persist(persist_dir=PERSIST_DIR)
-    print(f"💾 Indexes saved to '{PERSIST_DIR}'")
+    print(f"Indexes saved to '{PERSIST_DIR}'")
 
     return vector_index, summary_index
 
@@ -63,14 +63,14 @@ def load_indexes_from_disk() -> tuple[VectorStoreIndex, SummaryIndex]:
     Returns:
         Tuple of (VectorStoreIndex, SummaryIndex)
     """
-    print(f"📂 Loading existing indexes from '{PERSIST_DIR}'...")
+    print(f"Loading existing indexes from '{PERSIST_DIR}'...")
 
     storage_context = StorageContext.from_defaults(persist_dir=PERSIST_DIR)
 
     vector_index  = load_index_from_storage(storage_context, index_id=VECTOR_INDEX_ID)
     summary_index = load_index_from_storage(storage_context, index_id=SUMMARY_INDEX_ID)
 
-    print("✅ Indexes loaded successfully.")
+    print("Indexes loaded successfully.")
     return vector_index, summary_index
 
 

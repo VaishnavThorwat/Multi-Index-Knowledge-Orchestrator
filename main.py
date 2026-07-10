@@ -25,13 +25,13 @@ def run_query(query: str, verbose: bool = True) -> str:
         The agent's final response string.
     """
     vector_index, summary_index = get_indexes()
-    agent_executor = build_agent(vector_index, summary_index, verbose=verbose)
+    agent = build_agent(vector_index, summary_index, verbose=verbose)
 
-    print(f"\n🙋 Query: {query}")
-    result = agent_executor.invoke({"input": query})
+    print(f"\nQuery: {query}")
+    result = agent.invoke({"messages": [{"role": "user", "content": query}]})
 
-    response = result["output"]
-    print(f"\n🤖 Agent Response:\n{response}")
+    response = result["messages"][-1].content
+    print(f"\nAgent Response:\n{response}")
     return response
 
 
@@ -40,10 +40,10 @@ if __name__ == "__main__":
     # Add your queries here. A few examples to demonstrate both tools:
     # -----------------------------------------------------------------------
     queries = [
-        "Summarize the key findings of the documents provided.",       # → uses summary tool
-        "What are the main topics covered across all documents?",      # → uses summary tool
-        # "What is the policy number mentioned in section 3?",         # → uses semantic tool
-        # "When was the agreement signed?",                            # → uses semantic tool
+        "Summarize the key findings of the documents provided.",       # uses summary tool
+        "What are the main topics covered across all documents?",      # uses summary tool
+        # "What is the policy number mentioned in section 3?",         # uses semantic tool
+        # "When was the agreement signed?",                            # uses semantic tool
     ]
 
     for q in queries:
